@@ -95,12 +95,13 @@ public class EndnoteImporter extends Importer {
         Map<String, String> hm = new HashMap<>();
         String author;
         String type;
-        StringBuilder editor = new StringBuilder();
+        String editor;
         String artnum;
         for (String entry : entries) {
             hm.clear();
             author = "";
             type = BibEntry.DEFAULT_TYPE;
+            editor = "";
             artnum = "";
 
             boolean isEditedBook = false;
@@ -128,20 +129,17 @@ public class EndnoteImporter extends Importer {
 
                 String val = field.substring(2);
 
-                String stringAnd = " and ";
-
                 if ("A".equals(prefix)) {
                     if ("".equals(author)) {
                         author = val;
                     } else {
-                        author += stringAnd + val;
+                        author += " and " + val;
                     }
                 } else if ("E".equals(prefix)) {
                     if ("".equals(editor)) {
                         editor = val;
                     } else {
-                        editor.append(stringAnd);
-                        editor.append(val);
+                        editor += " and " + val;
                     }
                 } else if ("T".equals(prefix)) {
                     hm.put(FieldName.TITLE, val);
@@ -270,21 +268,21 @@ public class EndnoteImporter extends Importer {
     /**
      * We must be careful about the author names, since they can be presented differently
      * by different sources. Normally each %A tag brings one name, and we get the authors
-     * separated by stringAnd. This is the correct behaviour.
+     * separated by " and ". This is the correct behaviour.
      * One source lists the names separated by comma, with a comma at the end. We can detect
      * this format and fix it.
      * @param s The author string
      * @return The fixed author string
      */
     private static String fixAuthor(String s) {
-        int index = s.indexOf(stringAnd);
+        int index = s.indexOf(" and ");
         if (index >= 0) {
             return AuthorList.fixAuthorLastNameFirst(s);
         }
         // Look for the comma at the end:
         index = s.lastIndexOf(',');
         if (index == (s.length() - 1)) {
-            String mod = s.substring(0, s.length() - 1).replace(", ", stringAnd);
+            String mod = s.substring(0, s.length() - 1).replace(", ", " and ");
             return AuthorList.fixAuthorLastNameFirst(mod);
         } else {
             return AuthorList.fixAuthorLastNameFirst(s);

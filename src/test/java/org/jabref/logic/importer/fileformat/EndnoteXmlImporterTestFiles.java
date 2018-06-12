@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.fest.util.FilesException;
 import org.jabref.logic.importer.ImportFormatPreferences;
-
+import org.jabref.logic.util.FileType;
+import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -51,4 +54,12 @@ public class EndnoteXmlImporterTestFiles {
     void testImportEntries(String fileName) throws Exception {
         ImporterTestEngine.testImportEntries(new EndnoteXmlImporter(preferences), fileName, FILE_ENDING);
     }
+
+    @Test
+    public void testGetFileType() {
+        EndnoteXmlImporter enxi = new EndnoteXmlImporter(preferences);
+        FileType ft = enxi.getFileType();
+        assertEquals(FileType.ENDNOTE_XML, ft);
+    }
+
 }
