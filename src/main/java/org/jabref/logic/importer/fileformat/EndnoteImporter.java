@@ -101,7 +101,6 @@ public class EndnoteImporter extends Importer {
             hm.clear();
             author = "";
             type = BibEntry.DEFAULT_TYPE;
-            editor = "";
             artnum = "";
 
             boolean isEditedBook = false;
@@ -141,7 +140,8 @@ public class EndnoteImporter extends Importer {
                     if ("".equals(editor)) {
                         editor = val;
                     } else {
-                        editor += stringAnd + val;
+                        editor.append(stringAnd);
+                        editor.append(val);
                     }
                 } else if ("T".equals(prefix)) {
                     hm.put(FieldName.TITLE, val);
