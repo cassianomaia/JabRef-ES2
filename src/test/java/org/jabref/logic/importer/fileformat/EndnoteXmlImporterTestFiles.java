@@ -62,4 +62,10 @@ public class EndnoteXmlImporterTestFiles {
         assertEquals(FileType.ENDNOTE_XML, ft);
     }
 
+    @Test
+    public void testGetDescription(){
+        EndnoteXmlImporter enxi = new EndnoteXmlImporter(preferences);
+        String str = enxi.getDescription();
+        assertEquals("Importer for the EndNote XML format.", str);
+    }
 }
