@@ -95,7 +95,7 @@ public class EndnoteImporter extends Importer {
         Map<String, String> hm = new HashMap<>();
         String author;
         String type;
-        String editor;
+        StringBuilder editor = new StringBuilder();
         String artnum;
         for (String entry : entries) {
             hm.clear();
