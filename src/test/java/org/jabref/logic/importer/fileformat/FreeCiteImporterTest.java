@@ -1,12 +1,14 @@
 package org.jabref.logic.importer.fileformat;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 import java.util.Optional;
 
 import org.jabref.logic.importer.ImportFormatPreferences;
+import org.jabref.logic.importer.ParserResult;
 import org.jabref.logic.util.FileType;
 import org.jabref.model.entry.BibEntry;
 import org.jabref.testutils.category.FetcherTest;
@@ -15,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
 @FetcherTest //we mark this as fetcher test, because it depends on the avaiability of the FreeCite online library
@@ -53,5 +56,26 @@ public class FreeCiteImporterTest {
     public void testGetDescription() {
         assertEquals("This importer parses text format citations using the online API of FreeCite.",
                 importer.getDescription());
+    }
+
+    @Test
+    public void testImportEntries(){
+        String text = "Hello World!";
+        ParserResult pr = importer.importEntries(text);
+    }
+
+    @Test
+    public void testImportDatabase() throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new FileReader("/docs/home-hdd/jbarbirato-hdd/" +
+                "Documents/UFSCar/ES2/JabRef-ES2/teste.xml"));
+        ParserResult pr = importer.importDatabase(bufferedReader);
+        assertEquals(false, pr.isEmpty());
+    }
+
+    @Test
+    public void testImportDatabaseException() throws IOException {
+        assertThrows(java.lang.NullPointerException.class, ()->{
+            importer.importDatabase((BufferedReader) null);
+        });
     }
 }
