@@ -1,3 +1,10 @@
+.classpath
+.idea/
+.project
+.settings/
+bin/
+file:/
+out/
 .gradle/
 build/
 src/main/gen/
