@@ -1,10 +1,15 @@
 package org.jabref.logic.importer.fileformat;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.nio.Buffer;
+import java.util.Collections;
 import java.util.List;
 
+import com.fasterxml.jackson.core.util.BufferRecycler;
+import org.jabref.logic.importer.Parser;
 import org.jabref.logic.importer.ParserResult;
 import org.jabref.logic.util.FileType;
 import org.jabref.model.entry.BibEntry;
@@ -13,8 +18,10 @@ import org.jabref.model.entry.FieldName;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MrDLibImporterTest {
 
@@ -86,5 +93,21 @@ public class MrDLibImporterTest {
         List<BibEntry> resultList = parserResult.getDatabase().getEntries();
 
         assertSame(0, resultList.size());
+    }
+
+    @Test
+    public void testGetParserResult(){
+        importer.parserResult = new ParserResult(Collections.emptyList());
+        assertEquals(importer.getParserResult().isEmpty(), importer.parserResult.isEmpty());
+    }
+
+    @Test
+    public void testFalseIsRecognizedFormat() throws IOException {
+        assertFalse(importer.isRecognizedFormat(new BufferedReader(new FileReader(".gitignore"))));
+    }
+
+    @Test
+    public void testTrueIsRecognizedFormat() throws IOException {
+        assertTrue(importer.isRecognizedFormat(new BufferedReader(new FileReader("teste.xml"))));
     }
 }
