@@ -65,8 +65,8 @@ public class PdfContentImporterTest {
     }
 
     @Test
-    public void testBRImportDatabase() throws IOException {
-        assertThrows(NullPointerException.class,()->{
+    public void testBRImportDatabase() {
+        assertThrows(UnsupportedOperationException.class,()->{
             importer.importDatabase(new BufferedReader(new FileReader(".gitignore")));
         });
     }
