@@ -78,4 +78,9 @@ public class RepecNepImporterTest {
         assertEquals("Imports a New Economics Papers-Message from the REPEC-NEP Service.",
                 testImporter.getDescription());
     }
+
+    /*
+     * - O metodo importDatabase não especifica a excessao do try-catch
+     * - As outras propriedades são privadas e, portanto, nao ha como testa-las
+     */
 }

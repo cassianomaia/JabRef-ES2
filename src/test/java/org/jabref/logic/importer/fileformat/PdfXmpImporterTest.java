@@ -1,5 +1,8 @@
 package org.jabref.logic.importer.fileformat;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -20,8 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 public class PdfXmpImporterTest {
@@ -89,5 +91,43 @@ public class PdfXmpImporterTest {
     @Test
     public void testGetCommandLineId() {
         assertEquals("xmp", importer.getId());
+    }
+
+    @Test
+    public void testStringImportDatabase() throws IOException {
+        assertThrows(UnsupportedOperationException.class,()->{
+            importer.importDatabase("Julia");
+        });
+    }
+
+    @Test
+    public void testStringNullImportDatabase() throws IOException {
+        assertThrows(NullPointerException.class,()->{
+            importer.importDatabase((String) null);
+        });
+    }
+
+    @Test
+    public void testBRImportDatabase() {
+        assertThrows(UnsupportedOperationException.class,()->{
+            importer.importDatabase(new BufferedReader(new FileReader(".gitignore")));
+        });
+    }
+
+    @Test
+    public void testBRNullImportDatabase() throws IOException {
+        assertThrows(NullPointerException.class,()->{
+            importer.importDatabase(new BufferedReader(new FileReader((File) null)));
+        });
+    }
+
+    @Test
+    public void testBR2ImportDatabase() throws IOException {
+        assertFalse(importer.importDatabase(Paths.get(".gitignore"), null).isEmpty());
+    }
+
+    @Test
+    public void testBR2InvalidImportDatabase() throws IOException {
+        assertTrue(importer.importDatabase(Paths.get("julia/.gitignore"), null).isInvalid());
     }
 }
