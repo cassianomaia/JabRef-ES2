@@ -4,9 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 import org.jabref.logic.importer.Importer;
@@ -50,20 +48,20 @@ public class CSVImporter extends Importer {
     @Override
     public boolean isRecognizedFormat(BufferedReader reader) throws IOException {
         String str;
-        try{
+        try {
             while ((str = reader.readLine()) != null) {
                 if (CSVImporter.CSV_PATTERN.matcher(str).find()) {
                     return true;
                 }
             }
-        }catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             System.out.println ( "No such file or directory" );
         }
         return false;
     }
 
     @Override
-    public ParserResult importDatabase(BufferedReader reader) throws IOException{
+    public ParserResult importDatabase(BufferedReader reader) throws IOException {
         List<BibEntry> results = new ArrayList<>();
 
         // Preprocess entries
@@ -74,9 +72,9 @@ public class CSVImporter extends Importer {
                 String [] line = str.split(",");
                 BibEntry b = new BibEntry();
 
-                if(line[0].equals("Book")){
+                if (line[0].equals("Book")) {
                     b.setType("book");
-                }else if (line[0].equals("Article")) {
+                } else if (line[0].equals("Article")) {
                     b.setType("article");
                 }
                 setOrAppend(b, FieldName.TITLE, line[1], ", ");
@@ -96,10 +94,10 @@ public class CSVImporter extends Importer {
             }
         }
 
-
         return new ParserResult(results);
 
     }
+
     private static void setOrAppend(BibEntry b, String field, String value, String separator) {
         if (b.hasField(field)) {
             b.setField(field, b.getField(field).get() + separator + value);
