@@ -12,6 +12,7 @@ import org.jabref.model.bibtexkeypattern.GlobalBibtexKeyPattern;
 import org.jabref.model.database.BibDatabase;
 import org.jabref.model.database.BibDatabaseContext;
 import org.jabref.model.entry.BibEntry;
+import org.jabref.model.entry.FieldName;
 import org.jabref.model.strings.StringUtil;
 
 import org.slf4j.Logger;
@@ -54,6 +55,19 @@ public class BibtexKeyGenerator extends BracketedPattern {
         keyPattern.setDefaultValue("[" + pattern + "]");
         return new BibtexKeyGenerator(keyPattern, database, new BibtexKeyPatternPreferences("", "", false, true, true, keyPattern, ','))
                 .generateKey(entry);
+    }
+
+    static String generateKey ( BibEntry entry , boolean isAuto ) {
+        if ( isAuto == false ) {
+            return new BibtexKeyGenerator(null, new BibDatabase(), new BibtexKeyPatternPreferences("", "", false, true, true, null, ','))
+                    .generateKey(entry);
+        } else {
+            String[] authorArr = entry.getField ( FieldName.AUTHOR ).get().split ( "\\s+" );
+            String author = authorArr[authorArr.length - 1];
+            String year = entry.getField ( FieldName.YEAR).get();
+            String title = entry.getField (FieldName.TITLE ).get().split ( "\\s+" )[0].toUpperCase ();
+            return  author + year + title;
+        }
     }
 
     /**

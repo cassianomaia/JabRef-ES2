@@ -995,4 +995,13 @@ public class BibtexKeyGeneratorTest {
         entry.setField("title", "The Interesting Title");
         assertEquals("theinterestingtitle", BibtexKeyGenerator.generateKey(entry, "title:lower:(_)"));
     }
+
+    @Test
+    public void generateKeyAuto(){
+        BibEntry entry = new BibEntry ();
+        entry.setField ( "title", "Mapas de Kohonen" );
+        entry.setField ( "author", "Joao" );
+        entry.setField("year", "2018");
+        assertEquals("Joao2018MAPAS", BibtexKeyGenerator.generateKey(entry, true));
+    }
 }
